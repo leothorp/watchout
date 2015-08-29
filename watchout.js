@@ -4,6 +4,20 @@ var gameOptions = {
   enemyCount : 5
 };
 
+var gameStats = {
+  score: 0,
+  bestScore: 0
+};
+
+var updateScore = function() {
+  return d3.select('.current').text(gameStats.score.toString());
+};
+
+updateBestScore = function() {
+  gameStats.bestScore = Math.max(gameStats.bestScore, gameStats.score);
+  return d3.select('.high').text(gameStats.bestScore.toString());
+};
+
 var createEnemies = function() {
   var enemiesArray =[];
   for (var i = 0; i < gameOptions.enemyCount; i++) {
@@ -61,6 +75,10 @@ var buildGame = function() {
   enemies = createEnemies();
   drawEnemies(enemies);
   setInterval(moveEnemies, 1000);
+  setInterval(function(){
+    gameStats.score++;
+    updateScore();
+  }, 50);
   drawPlayer();
 };
 /*
@@ -73,20 +91,21 @@ var enemyPositions = function(){
 };
 */
 var checkCollision = function(enemy, collidedCallback) {
-  players.forEach(function(player) {
-    var radiusSum, separation, xDiff, yDiff;
-    radiusSum = parseFloat(enemy.attr('r')) + player.r;
-    xDiff = parseFloat(enemy.attr('cx')) - player.x;
-    yDiff = parseFloat(enemy.attr('cy')) - player.y;
-    separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-    if (separation < radiusSum) return collidedCallback(player, enemy);
-  });
+
+  var radiusSum, separation, xDiff, yDiff;
+  radiusSum = parseFloat(enemy.attr('r')) + player.r;
+  xDiff = parseFloat(enemy.attr('cx')) - player.x;
+  yDiff = parseFloat(enemy.attr('cy')) - player.y;
+  separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+  if (separation < radiusSum) return collidedCallback(player, enemy);
+
 };
-    onCollision = function() {
-      updateBestScore();
-      gameStats.score = 0;
-      return updateScore();
-    };
+
+var onCollision = function() {
+  updateBestScore();
+  gameStats.score = 0;
+  return updateScore();
+};
 
 var collisionFactory = function(){
   var enemy = d3.select(this);
@@ -97,8 +116,8 @@ var collisionFactory = function(){
   };
 
   var endPos = {
-    x: Math.random() * window.innerWidth;
-    y: Math.random() * 500;
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * 500
   };
 
   return function(t) {
@@ -126,6 +145,5 @@ var moveEnemies = function() {
   //   return Math.random() * 500;
   // });
 };
-
 
 buildGame();
