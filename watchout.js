@@ -30,7 +30,6 @@ var createEnemies = function() {
 var svgContainer = d3.select("body").append("svg").attr("width", '100%').attr("height", 500);
 
 
-
 var drawEnemies = function(enemiesArray) {
   var enemies = svgContainer.selectAll('.enemy').data(enemiesArray).enter().append('circle');
   enemies.attr("cx", function (d) { return d.x; });
