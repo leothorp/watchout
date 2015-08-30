@@ -11,13 +11,12 @@ body {
   color: white;
 }
 
-.player
+.player {
 
-
+}
 
 .enemy {
-  /* animation-duration: 2s; */
-  /* animation-name: spin; */
+
 }
 
 @keyframes spin {
@@ -26,9 +25,13 @@ body {
 }
 
 @keyframes oscillate {
-  0% {transform: translateX(0px);}
-  25% {transform: translateX(5px);}
-  50% {transform: translateX(0px);}
-  75% {transform: translateX(-5px);}
+  0%  {transform: translateX(0px);}
+  12% {transform: translateX(-5px);}
+  24% {transform: translateX(0px);}
+  36% {transform: translateX(5px);}
+  48% {transform: translateX(0px);}
+  60% {transform: translateX(-5px);}
+  72% {transform: translateX(0px);}
+  84% {transform: translateX(5px);}
   100% {transform: translateX(0px);}
 }

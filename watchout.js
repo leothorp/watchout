@@ -27,17 +27,15 @@ updateCollisions = function() {
 var createEnemies = function() {
   var enemiesArray =[];
   for (var i = 0; i < gameOptions.enemyCount; i++) {
-    enemiesArray.push({ id : i, x: Math.random() * window.innerWidth, y : Math.random() * 500, r : 10, width: 20, height: 20, color : 'blue' });
+    enemiesArray.push({ id : i, x: Math.random() * window.innerWidth, y : Math.random() * 500, r : 20, width: 40, height: 40, color : 'blue' });
   }
   return enemiesArray;
 };
 
-
 var svgContainer = d3.select("body").append("svg").attr("width", '100%').attr("height", 500);
 
-
 var drawEnemies = function(enemiesArray) {
-  var enemies = svgContainer.selectAll('.enemy').data(enemiesArray).enter().append('rect');
+  var enemies = svgContainer.selectAll('.enemy').data(enemiesArray).enter().append('image');
   enemies.attr("x", function (d) { return d.x; });
   enemies.attr("y", function (d) { return d.y; });
   enemies.attr("r", function (d) { return d.r; });
@@ -51,9 +49,8 @@ var drawEnemies = function(enemiesArray) {
   enemies.style("animation-timing-function", 'linear');
   enemies.style("transform-origin", 'center');
   enemies.attr('recentlyCollided', false);
-  //enemies.attr("background", url(assets/asteroid.png));
+  enemies.attr('xlink:href', 'http://vignette1.wikia.nocookie.net/fantendo/images/1/1c/Shuriken_MKWC.png/revision/latest?cb=20130712193112');
 };
-
 
 var player;
 
@@ -63,14 +60,11 @@ var createPlayer = function() {
 };
 
 var drag = d3.behavior.drag()
- .on('dragstart', function() { d3.select(this).style('fill', 'yellow'); })
- .on('drag', function() { d3.select(this)
+.on('drag', function() { d3.select(this)
                           .attr('cx', d3.event.x)
                           .attr('cy', d3.event.y);
                           player.x = d3.event.x;
-                          player.y = d3.event.y;})
- .on('dragend', function() { d3.select(this).style('fill', 'red'); });
-
+                          player.y = d3.event.y;});
 
 
 var drawPlayer = function() {
@@ -83,7 +77,6 @@ var drawPlayer = function() {
   player.call(drag);
 };
 
-
 var buildGame = function() {
   var enemies = [];
   enemies = createEnemies();
@@ -95,16 +88,6 @@ var buildGame = function() {
   }, 50);
   drawPlayer();
 };
-/*
-var enemyPositions = function(){
-  var enemiesArray =[];
-  for (var i = 0; i < gameOptions.enemyCount; i++) {
-    enemiesArray.push({ x: Math.random() * 100, y : Math.random() * 100});
-  }
-  return enemiesArray;
-};
-*/
-//var recentlyCollided = false;
 
 var checkCollision = function(enemy, collidedCallback) {
   var collided = false;
@@ -162,20 +145,11 @@ var collisionFactory = function(){
     };
     enemy.attr('x', enemyNextPos.x).attr('y', enemyNextPos.y);
   };
-
 };
 
 var moveEnemies = function() {
-  var enemiesData = createEnemies();
   var enemies = svgContainer.selectAll('.enemy');
   enemies.transition().duration(2000).tween('custom', collisionFactory);
-
-  // .attr("cx", function(d) {
-  //   return Math.random() * window.innerWidth; // Is this a good way to reference
-  // })
-  // .attr("cy", function(d) {                // game container's width?
-  //   return Math.random() * 500;
-  // });
 };
 
 buildGame();
